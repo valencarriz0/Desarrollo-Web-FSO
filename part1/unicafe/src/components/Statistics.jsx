@@ -10,13 +10,14 @@ const Statistics = ({good, neutral, bad}) => {
     getAll()===0 ? <p>No hay FeedBack</p> :
     <>
       <h2>Estadísticas</h2>
-      <StatisticLine text='Bueno' value={good}/>
-      <StatisticLine text='Neutral' value={neutral}/>
-      <StatisticLine text='Malo' value= {bad}/>
-      <StatisticLine text='Todo' value= {getAll()}/>
-      <StatisticLine text='Promedio' value= {getAverage()}/>
-      <StatisticLine text='Positivo' value= {getPositive()}/>
-      
+      <table>
+        <StatisticLine text='Bueno' value={good}/>
+        <StatisticLine text='Neutral' value={neutral}/>
+        <StatisticLine text='Malo' value= {bad}/>
+        <StatisticLine text='Todo' value= {getAll()}/>
+        <StatisticLine text='Promedio' value= {getAverage()}/>
+        <StatisticLine text='Positivo %' value= {getPositive()}/>
+      </table>
     </>
   )
 
