@@ -20,13 +20,25 @@ const App = () => {
     copy[selected] += 1
     setVotes(copy)
   }
+  const mayorVoto=Math.max(...votes)
+  const posicionMayorVoto=votes.indexOf(mayorVoto)
 
   return (
     <div>
+      <h1>Anécdotas</h1>
      <p> {anecdotes[selected]}</p>
      <button onClick={()=>{setSelected(getRandomNumber())}}>Otra anécdota</button>
      <button onClick={actualizarVotos}>Votar</button>
-     <p>Número de votos: {votes[selected]}</p>
+     {mayorVoto > 0 ? (
+          <>
+            <p>Número de votos: {votes[selected]}</p>
+            <p>{anecdotes[posicionMayorVoto]}</p>
+          </>
+        ) : (
+            <h2>No hay votos</h2>
+           ) 
+      }
+
     </div>
   )
 }
