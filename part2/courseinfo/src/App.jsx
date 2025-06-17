@@ -1,5 +1,5 @@
 import Course from './components/Course'
-import Total from './components/Total'
+
 const App = () => {
     const course = {
       id: 1,
@@ -19,6 +19,11 @@ const App = () => {
           name: 'State of a component',
           exercises: 14,
           id: 3
+        },
+        {
+          name: 'State of a component',
+          exercises: 9,
+          id: 4        
         }
         
     ]
