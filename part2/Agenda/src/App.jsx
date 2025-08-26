@@ -7,19 +7,31 @@ function App() {
 
   const addName = (event) => {
     event.preventDefault()
-   setPersons(pre=>[...pre,{name:newName}])
     console.log('newName', newName)
+    const personObject = {
+    name: newName,
+    id: persons.length + 1,
+    }
+
+  setPersons(persons.concat(personObject))
+  setNewName('')
+
+  }
+
+  const handleNameChange= (event)=>{
+    console.log(event.target.value)
+    setNewName(event.target.value)
   }
 
   return (
       <div>
         <h2>Agenda Telefónica</h2>
         <form onSubmit={addName}>
-          <input value={newName} placeholder='ingrese nombre' onChange={(event) => setNewName(event.target.value)}/>
+          <input value={newName} placeholder='ingrese nombre' onChange={handleNameChange}/>
           <button type="submit">Guardar</button>
         </form> 
         <h2>Numbers</h2>
-        <ul>{persons.map((person, id)=> <li key={id}>{person.name}</li> )}</ul>
+        <ul>{persons.map((person)=> <li key={person.id}>{person.name}</li> )}</ul>
       </div>     
   )
 }
