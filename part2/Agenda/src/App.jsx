@@ -8,6 +8,17 @@ function App() {
   const addName = (event) => {
     event.preventDefault()
     console.log('newName', newName)
+
+      // Verifico si ya existe el nombre en la agenda
+    const nameExists = persons.some(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
+    )
+
+    if (nameExists) {
+      alert(`${newName} ya está en la agenda telefónica`)
+      return
+    }
+
     const personObject = {
     name: newName,
     id: persons.length + 1,
