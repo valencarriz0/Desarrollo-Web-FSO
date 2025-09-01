@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './App.css'
+import Filtrado from './components/Filtrado'
+import Agenda from './components/Agenda'
+import Contacts from './components/Contacts'
 
 function App() {
   const [persons, setPersons] = useState([{name:"Genaro", number: "123456789"},{name: "Facundo", number: "987654321"}])
@@ -51,16 +54,15 @@ function App() {
 
   return (
       <div>
-        <h3>Filtrar por nombre</h3>
-        <input type="text" placeholder="Buscar..." onChange={handleSearch}/>
-        <h2>Agenda Telefónica</h2>
-        <form onSubmit={addNumber}>
-          <input value={newName} placeholder='Ingrese nombre' onChange={handleNameChange}/>
-          <input value={newNumber} placeholder='Ingrese número' onChange={handleNumberChange}/>
-          <button type="submit">Guardar</button>
-        </form>
-        <h2>Resultados de búsqueda</h2>
-        <ul>{filteredItems.map((person) => <li key={person.id}>{person.name} {person.number}</li>)}</ul>
+        <Filtrado handleSearch={handleSearch} />
+        <Agenda
+          addNumber={addNumber}
+          handleNameChange={handleNameChange}
+          handleNumberChange={handleNumberChange}
+          newName={newName}
+          newNumber={newNumber}
+        />
+        <Contacts filteredItems={filteredItems} />
       </div>
   )
 }
