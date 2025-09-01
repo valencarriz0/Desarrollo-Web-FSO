@@ -3,6 +3,7 @@ import './App.css'
 import Filtrado from './components/Filtrado'
 import Agenda from './components/Agenda'
 import Contacts from './components/Contacts'
+import axios from 'axios'
 
 function App() {
   const [persons, setPersons] = useState([{name:"Genaro", number: "123456789"},{name: "Facundo", number: "987654321"}])
@@ -14,7 +15,7 @@ function App() {
     event.preventDefault()
     console.log('newNumber', newNumber)
 
-      // Verifico si ya existe el nombre en la agenda
+
     const numberExists = persons.some(
       (person) => person.number === newNumber
     )
@@ -26,12 +27,21 @@ function App() {
 
     const personObject = {
     name: newName,
-    number: newNumber,
-    id: persons.length + 1,
+    number: newNumber
     }
 
     setPersons(persons.concat(personObject))
     setNewNumber('')
+ try{axios
+    .post('http://localhost:3001/persons', personObject)
+    .then(response => {
+      setPersons(persons.concat(response.data))
+      setNewName('')
+      setNewNumber('')
+      console.log(response.data)
+    })} catch (error) {
+    console.error('Error adding person:', error)
+  }
 
   }
 
@@ -51,6 +61,7 @@ function App() {
   const filteredItems = persons.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   return (
       <div>
