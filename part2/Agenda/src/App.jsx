@@ -47,6 +47,19 @@ function App() {
       })
   }
 
+  const deletePerson = (id, name) => {
+    if (window.confirm(`¿Seguro que deseas eliminar a ${name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+        .catch(error => {
+          console.error('Error al eliminar:', error)
+        })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -73,7 +86,12 @@ function App() {
         newName={newName}
         newNumber={newNumber}
       />
-      <Contacts filteredItems={filteredItems} />
+      <Contacts 
+        persons={persons}
+        filteredItems={filteredItems}
+        searchTerm={searchTerm}
+        deletePerson={deletePerson}
+      />
     </div>
   )
 }
