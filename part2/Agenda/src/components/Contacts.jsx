@@ -1,7 +1,9 @@
+
+
 const Contacts = ({ filteredItems, deletePerson }) => {
   return (
     <div>
-      <h2>Agenda</h2>
+      <h2 className="text-2xl font-bold mb-4">Agenda</h2>
       <ul>
         {filteredItems.map(person => (
           <li key={person.id}>
