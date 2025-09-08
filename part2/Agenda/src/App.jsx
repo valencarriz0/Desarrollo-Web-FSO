@@ -1,20 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Filtrado from './components/Filtrado'
 import Agenda from './components/Agenda'
 import Contacts from './components/Contacts'
-import axios from 'axios'
+import personService from './services/persons'
 
 function App() {
-  const [persons, setPersons] = useState([{name:"Genaro", number: "123456789"},{name: "Facundo", number: "987654321"}])
-  const [newName, setNewName]= useState ('')
-  const [newNumber, setNewNumber]= useState ('')
-  const [searchTerm, setSearchTerm] = useState('');
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // cargar datos iniciales desde el backend
+  useEffect(() => {
+    personService.getAll().then(initialPersons => {
+      setPersons(initialPersons)
+    })
+  }, [])
 
   const addNumber = (event) => {
     event.preventDefault()
-    console.log('newNumber', newNumber)
-
 
     const numberExists = persons.some(
       (person) => person.number === newNumber
@@ -26,57 +31,51 @@ function App() {
     }
 
     const personObject = {
-    name: newName,
-    number: newNumber
+      name: newName,
+      number: newNumber
     }
 
-    setPersons(persons.concat(personObject))
-    setNewNumber('')
- try{axios
-    .post('http://localhost:3001/persons', personObject)
-    .then(response => {
-      setPersons(persons.concat(response.data))
-      setNewName('')
-      setNewNumber('')
-      console.log(response.data)
-    })} catch (error) {
-    console.error('Error adding person:', error)
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        console.error('Error adding person:', error)
+      })
   }
 
-  }
-
-  const handleNameChange= (event)=>{
-    console.log(event.target.value)
+  const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value)
   }
 
   const filteredItems = persons.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  )
 
   return (
-      <div>
-        <Filtrado handleSearch={handleSearch} />
-        <Agenda
-          addNumber={addNumber}
-          handleNameChange={handleNameChange}
-          handleNumberChange={handleNumberChange}
-          newName={newName}
-          newNumber={newNumber}
-        />
-        <Contacts filteredItems={filteredItems} />
-      </div>
+    <div>
+      <Filtrado handleSearch={handleSearch} />
+      <Agenda
+        addNumber={addNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        newName={newName}
+        newNumber={newNumber}
+      />
+      <Contacts filteredItems={filteredItems} />
+    </div>
   )
 }
 
 export default App
-
