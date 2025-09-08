@@ -21,30 +21,49 @@ function App() {
   const addNumber = (event) => {
     event.preventDefault()
 
-    const numberExists = persons.some(
-      (person) => person.number === newNumber
+    // buscamos si ya existe alguien con el mismo nombre
+    const existingPerson = persons.find(
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
     )
 
-    if (numberExists) {
-      alert(`${newNumber} ya está en la agenda telefónica`)
-      return
-    }
+    if (existingPerson) {
+      // confirmamos si quiere actualizar el número
+      if (window.confirm(
+        `${newName} ya está en la agenda. ¿Deseas reemplazar el número antiguo por el nuevo?`
+      )) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
 
-    const personObject = {
-      name: newName,
-      number: newNumber
-    }
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(p => p.id !== existingPerson.id ? p : returnedPerson)
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch(error => {
+            console.error('Error al actualizar:', error)
+          })
+      }
+    } else {
+      // si no existe, creamos uno nuevo
+      const personObject = {
+        name: newName,
+        number: newNumber
+      }
 
-    personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
-      .catch(error => {
-        console.error('Error adding person:', error)
-      })
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          console.error('Error al agregar:', error)
+        })
+    }
   }
 
   const deletePerson = (id, name) => {
@@ -86,12 +105,7 @@ function App() {
         newName={newName}
         newNumber={newNumber}
       />
-      <Contacts 
-        persons={persons}
-        filteredItems={filteredItems}
-        searchTerm={searchTerm}
-        deletePerson={deletePerson}
-      />
+      <Contacts filteredItems={filteredItems} deletePerson={deletePerson} />
     </div>
   )
 }

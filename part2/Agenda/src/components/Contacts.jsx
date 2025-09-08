@@ -1,31 +1,17 @@
-import React from 'react'
-
-const Contacts = ({ persons, filteredItems, searchTerm, deletePerson }) => {
+const Contacts = ({ filteredItems, deletePerson }) => {
   return (
     <div>
-      <h2>Lista completa de contactos</h2>
+      <h2>Agenda</h2>
       <ul>
-        {persons.map((person) => (
+        {filteredItems.map(person => (
           <li key={person.id}>
-            {person.name} {person.number}
-            <button onClick={() => deletePerson(person.id, person.name)}>Eliminar</button>
+            {person.name} — {person.number}
+            <button onClick={() => deletePerson(person.id, person.name)}>
+              eliminar
+            </button>
           </li>
         ))}
       </ul>
-
-      {searchTerm && (
-        <div>
-          <h2>Resultados de búsqueda</h2>
-          <ul>
-            {filteredItems.map((person) => (
-              <li key={person.id}>
-                {person.name} {person.number}
-                <button onClick={() => deletePerson(person.id, person.name)}>Eliminar</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   )
 }
